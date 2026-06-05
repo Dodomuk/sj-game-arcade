@@ -47,6 +47,30 @@
             font-size: 16px;
         }
 
+        .home-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .secret-button {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .secret-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
         .games-grid {
             display: grid;
             gap: 15px;
@@ -63,10 +87,15 @@
             border: 2px solid #f0f0f0;
         }
 
-        .game-card:hover {
+        .game-card:hover:not(.disabled) {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             border-color: #667eea;
+        }
+
+        .game-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .game-emoji {
@@ -110,57 +139,83 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 14px;
+            transition: all 0.3s ease;
         }
 
         .back-button:hover {
             background: #764ba2;
+            transform: translateY(-2px);
         }
 
         .game-title-header {
             font-size: 20px;
             font-weight: 700;
             color: #333;
+            flex: 1;
+            text-align: center;
         }
 
-        /* 연예인 맞추기 */
-        .images-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 500px) {
-            .images-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .image-box {
+        .drama-image-container {
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
-        .image-box img {
+        .drama-image-container img {
             width: 100%;
-            height: 200px;
+            height: 300px;
             object-fit: cover;
             display: block;
+        }
+
+        .drama-options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .drama-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .drama-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateX(5px);
+        }
+
+        .drama-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
         }
 
         .button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 12px 20px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            width: 100%;
+            flex: 1;
         }
 
         .button:hover {
@@ -200,35 +255,165 @@
         .hidden {
             display: none;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button.submit {
+            background: #667eea;
+            color: white;
+        }
+
+        .modal-button.submit:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .modal-button.cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .modal-button.cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- 홈 화면 -->
         <div id="homeScreen" class="game-screen active">
-            <h1>🎮 승진이의 게임 아케이드</h1>
+            <div class="home-header">
+                <h1>🎮 승진이의 게임 아케이드</h1>
+                <button class="secret-button" onclick="openPasswordModal()">나는 승진이야</button>
+            </div>
             <p class="subtitle">다양한 게임을 즐겨보세요!</p>
             <div class="games-grid" id="gamesList"></div>
         </div>
 
-        <!-- 연예인 맞추기 -->
-        <div id="guessCelebrity" class="game-screen">
+        <!-- 드라마 제목 맞추기 -->
+        <div id="dramaTitleGame" class="game-screen">
             <div class="game-header">
                 <button class="back-button" onclick="goHome()">← 돌아가기</button>
-                <div class="game-title-header">🌟 연예인 맞추기</div>
+                <div class="game-title-header">🌟 드라마 제목 맞추기</div>
             </div>
-            <div class="images-container" id="celebImages"></div>
-            <button class="button" id="revealBtn" onclick="revealAnswers()">정답 공개</button>
-            <div id="answersContainer" class="answers-container hidden"></div>
+            <div class="drama-image-container" id="dramaImageContainer"></div>
+            <div class="drama-options" id="dramaOptions"></div>
+            <div class="button-group">
+                <button class="button" onclick="revealDramaAnswer()" id="revealDramaBtn">정답 공개</button>
+                <button class="button" onclick="nextRound()" id="nextRoundBtn" style="display: none;">다음라운드</button>
+            </div>
+            <div id="dramaAnswerContainer" class="answers-container hidden"></div>
+        </div>
+    </div>
+
+    <!-- 비밀번호 모달 -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">비밀번호를 입력해주세요</div>
+            <input type="password" id="passwordInput" class="password-input" placeholder="****" onkeypress="if(event.key==='Enter') checkPassword()">
+            <div class="error-message" id="errorMessage">잘못된 비밀번호입니다</div>
+            <div class="modal-buttons">
+                <button class="modal-button submit" onclick="checkPassword()">확인</button>
+                <button class="modal-button cancel" onclick="closePasswordModal()">취소</button>
+            </div>
         </div>
     </div>
 
     <script>
         const games = [
             {
-                id: 'guess',
-                title: '연예인 맞추기',
-                description: '연예인 사진을 보고 이름을 맞혀보세요!',
+                id: 'drama',
+                title: '드라마 제목 맞추기',
+                description: '연예인 사진을 보고 드라마 제목을 맞혀보세요!',
                 emoji: '🌟',
             },
             {
@@ -236,25 +421,43 @@
                 title: '메모리 게임',
                 description: '카드를 뒤집어 연예인 쌍을 찾으세요!',
                 emoji: '🎴',
+                disabled: true,
             },
             {
                 id: 'reaction',
                 title: '반응속도 게임',
                 description: '빠르게 클릭하여 반응속도를 측정하세요!',
                 emoji: '⚡',
+                disabled: true,
             },
         ];
 
-        const celebrities = [
-            { name: 'A', image: './images/celebrity-1.jpg' },
-            { name: 'B', image: './images/celebrity-2.jpg' },
-            { name: 'C', image: './images/celebrity-3.jpg' },
+        const dramaData = [
+            {
+                image: './images/celebrity-1.jpg',
+                options: ['드라마 1-1', '드라마 1-2', '드라마 1-3'],
+                correct: 0,
+            },
+            {
+                image: './images/celebrity-2.jpg',
+                options: ['드라마 2-1', '드라마 2-2', '드라마 2-3'],
+                correct: 1,
+            },
+            {
+                image: './images/celebrity-3.jpg',
+                options: ['드라마 3-1', '드라마 3-2', '드라마 3-3'],
+                correct: 2,
+            },
         ];
+
+        let currentRound = 0;
+        let selectedAnswer = null;
+        const PASSWORD = '0629';
 
         function initHome() {
             const gamesList = document.getElementById('gamesList');
             gamesList.innerHTML = games.map(game => `
-                <div class="game-card" onclick="openGame('${game.id}')">
+                <div class="game-card ${game.disabled ? 'disabled' : ''}" ${!game.disabled ? `onclick="openGame('${game.id}')"` : ''}>
                     <div class="game-emoji">${game.emoji}</div>
                     <div class="game-title">${game.title}</div>
                     <div class="game-description">${game.description}</div>
@@ -272,41 +475,111 @@
         }
 
         function openGame(gameId) {
-            if (gameId === 'guess') {
-                initGuessCelebrity();
-                showScreen('guessCelebrity');
+            if (gameId === 'drama') {
+                initDramaGame();
+                showScreen('dramaTitleGame');
             }
         }
 
-        function initGuessCelebrity() {
-            const celebImages = document.getElementById('celebImages');
-            celebImages.innerHTML = celebrities.map(celeb => `
-                <div class="image-box">
-                    <img src="${celeb.image}" alt="${celeb.name}">
-                </div>
+        function initDramaGame() {
+            currentRound = 0;
+            loadDramaRound();
+        }
+
+        function loadDramaRound() {
+            if (currentRound >= dramaData.length) {
+                currentRound = 0;
+            }
+
+            const data = dramaData[currentRound];
+            selectedAnswer = null;
+
+            const imageContainer = document.getElementById('dramaImageContainer');
+            imageContainer.innerHTML = `<img src="${data.image}" alt="드라마">`;
+
+            const optionsContainer = document.getElementById('dramaOptions');
+            optionsContainer.innerHTML = data.options.map((option, index) => `
+                <div class="drama-option" onclick="selectAnswer(${index})" id="option-${index}">${option}</div>
             `).join('');
 
-            document.getElementById('revealBtn').innerText = '정답 공개';
-            document.getElementById('answersContainer').classList.add('hidden');
+            document.getElementById('revealDramaBtn').style.display = 'block';
+            document.getElementById('nextRoundBtn').style.display = 'none';
+            document.getElementById('dramaAnswerContainer').classList.add('hidden');
         }
 
-        function revealAnswers() {
-            const answersContainer = document.getElementById('answersContainer');
-            const btn = document.getElementById('revealBtn');
+        function selectAnswer(index) {
+            selectedAnswer = index;
+            document.querySelectorAll('.drama-option').forEach((el, i) => {
+                if (i === index) {
+                    el.classList.add('selected');
+                } else {
+                    el.classList.remove('selected');
+                }
+            });
+        }
 
-            if (answersContainer.classList.contains('hidden')) {
-                answersContainer.innerHTML = celebrities.map(celeb => `
-                    <div class="answer-card">${celeb.name}</div>
-                `).join('');
-                answersContainer.classList.remove('hidden');
-                btn.innerText = '다시하기';
+        function revealDramaAnswer() {
+            const data = dramaData[currentRound];
+            const answerContainer = document.getElementById('dramaAnswerContainer');
+            const correct = selectedAnswer === data.correct;
+
+            answerContainer.innerHTML = `
+                <div class="answer-card" style="background: ${correct ? 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)' : 'linear-gradient(135deg, #d32f2f 0%, #c62828 100%)'}">
+                    ${correct ? '✅ 정답입니다!' : '❌ 오답입니다'}
+                </div>
+                <div class="answer-card">정답: ${data.options[data.correct]}</div>
+            `;
+
+            answerContainer.classList.remove('hidden');
+            document.getElementById('revealDramaBtn').style.display = 'none';
+            document.getElementById('nextRoundBtn').style.display = 'block';
+        }
+
+        function nextRound() {
+            currentRound++;
+            if (currentRound < dramaData.length) {
+                loadDramaRound();
             } else {
-                answersContainer.classList.add('hidden');
-                btn.innerText = '정답 공개';
+                alert('모든 라운드를 완료했습니다!');
+                goHome();
             }
         }
 
-        // 초기화
+        function openPasswordModal() {
+            document.getElementById('passwordModal').classList.add('active');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('active');
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === PASSWORD) {
+                closePasswordModal();
+                showAllAnswers();
+            } else {
+                document.getElementById('errorMessage').classList.add('show');
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function showAllAnswers() {
+            alert('모든 정답:\n\n' + dramaData.map((data, i) =>
+                `라운드 ${i + 1}: ${data.options[data.correct]}`
+            ).join('\n'));
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('passwordModal');
+            if (event.target === modal) {
+                closePasswordModal();
+            }
+        }
+
         initHome();
     </script>
 </body>
