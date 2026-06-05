@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>승진이의 게임 아케이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .games-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f0f0f0;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .game-emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .game-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .game-screen {
+            display: none;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back-button:hover {
+            background: #764ba2;
+        }
+
+        .game-title-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* 연예인 맞추기 */
+        .images-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .images-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .image-box {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            width: 100%;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .answers-container {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .answer-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 홈 화면 -->
+        <div id="homeScreen" class="game-screen active">
+            <h1>🎮 승진이의 게임 아케이드</h1>
+            <p class="subtitle">다양한 게임을 즐겨보세요!</p>
+            <div class="games-grid" id="gamesList"></div>
+        </div>
+
+        <!-- 연예인 맞추기 -->
+        <div id="guessCelebrity" class="game-screen">
+            <div class="game-header">
+                <button class="back-button" onclick="goHome()">← 돌아가기</button>
+                <div class="game-title-header">🌟 연예인 맞추기</div>
+            </div>
+            <div class="images-container" id="celebImages"></div>
+            <button class="button" id="revealBtn" onclick="revealAnswers()">정답 공개</button>
+            <div id="answersContainer" class="answers-container hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        const games = [
+            {
+                id: 'guess',
+                title: '연예인 맞추기',
+                description: '연예인 사진을 보고 이름을 맞혀보세요!',
+                emoji: '🌟',
+            },
+            {
+                id: 'memory',
+                title: '메모리 게임',
+                description: '카드를 뒤집어 연예인 쌍을 찾으세요!',
+                emoji: '🎴',
+            },
+            {
+                id: 'reaction',
+                title: '반응속도 게임',
+                description: '빠르게 클릭하여 반응속도를 측정하세요!',
+                emoji: '⚡',
+            },
+        ];
+
+        const celebrities = [
+            { name: 'A', image: '../public/images/celebrity-1.jpg' },
+            { name: 'B', image: '../public/images/celebrity-2.jpg' },
+            { name: 'C', image: '../public/images/celebrity-3.jpg' },
+        ];
+
+        function initHome() {
+            const gamesList = document.getElementById('gamesList');
+            gamesList.innerHTML = games.map(game => `
+                <div class="game-card" onclick="openGame('${game.id}')">
+                    <div class="game-emoji">${game.emoji}</div>
+                    <div class="game-title">${game.title}</div>
+                    <div class="game-description">${game.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.game-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function goHome() {
+            showScreen('homeScreen');
+        }
+
+        function openGame(gameId) {
+            if (gameId === 'guess') {
+                initGuessCelebrity();
+                showScreen('guessCelebrity');
+            }
+        }
+
+        function initGuessCelebrity() {
+            const celebImages = document.getElementById('celebImages');
+            celebImages.innerHTML = celebrities.map(celeb => `
+                <div class="image-box">
+                    <img src="${celeb.image}" alt="${celeb.name}">
+                </div>
+            `).join('');
+
+            document.getElementById('revealBtn').innerText = '정답 공개';
+            document.getElementById('answersContainer').classList.add('hidden');
+        }
+
+        function revealAnswers() {
+            const answersContainer = document.getElementById('answersContainer');
+            const btn = document.getElementById('revealBtn');
+
+            if (answersContainer.classList.contains('hidden')) {
+                answersContainer.innerHTML = celebrities.map(celeb => `
+                    <div class="answer-card">${celeb.name}</div>
+                `).join('');
+                answersContainer.classList.remove('hidden');
+                btn.innerText = '다시하기';
+            } else {
+                answersContainer.classList.add('hidden');
+                btn.innerText = '정답 공개';
+            }
+        }
+
+        // 초기화
+        initHome();
+    </script>
+</body>
+</html>
